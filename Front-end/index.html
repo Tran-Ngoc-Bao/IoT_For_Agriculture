@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Thống kê mực nước</title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-left">
+            <h1>
+                <pre> Nhóm IoT</pre>
+            </h1>
+        </div>
+        <nav class="header-center">
+            <ul>
+                <li><a href="">Trang chủ</a></li>&nbsp;&nbsp;&nbsp;&nbsp;
+                <li><a href="https://github.com/TranNgocBao12062003/ProjectIOT">Liên hệ</a></li>
+            </ul>
+        </nav>
+        <div class="header-right">
+            <a href="./login.html"><button class="login-button">Đăng nhập</button></a>
+        </div>
+    </header>
+
+
+
+
+    <div class="chart-container">
+        <div class="date-container">
+            <div class="current-date">
+                <h4 id="current-date"></h4>
+            </div>
+            <div class="date-select">
+                <label for="date-input">Chọn ngày:</label>
+                <input type="date" id="date-input">
+                <button class="btn btn-primary" onclick="redirectToLogin()">Xem</button>
+            </div>
+        </div>
+        <canvas id="hourly-chart"></canvas>
+    </div>
+
+    <div class="table-container">
+        <div class="mb-3">
+            <h5>Chọn khu vực</h5>
+            <select class="form-select" aria-label="Khu vực" onchange="handleRegionChange(event)">
+                <option selected>Hà Nội</option>
+                <option>Khu vực 1</option>
+                <option>Khu vực 2</option>
+                <!-- Thêm các khu vực khác vào đây -->
+            </select>
+            <div class="map-container">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59587.94638114343!2d105.79576379581097!3d21.022814759628478!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab9bd9861ca1%3A0xe7887f7b72ca17a9!2sHanoi%2C%20Vietnam!5e0!3m2!1sen!2sus!4v1698257530456!5m2!1sen!2sus"
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
+    <script>
+        // Dữ liệu mẫu cho biểu đồ
+        var hourlyData = {
+            labels: ['0h', '1h', '2h', '3h', '4h', '5h', '6h', '7h', '8h', '9h', '10h', '11h', '12h', '13h', '14h', '15h', '16h', '17h', '18h', '19h', '20h', '21h', '22h', '23h'], // Các nhãn trục x
+            datasets: [{
+                label: 'Mực nước',
+                data: [10, 5, 8, 12, 6, 9, 11, 8, 12, 6, 9, 11, 10, 5, 8, 12, 6, 9, 11, 8, 12, 6, 9, 11], // Dữ liệu mực nước tương ứng với từng giờ
+                backgroundColor: 'rgba(54, 162, 235, 0.5)', // Màu nền cột
+                borderColor: 'rgba(54, 162, 235, 1)', // Màu viền cột
+                borderWidth: 1 // Độ rộng viền cột
+            }]
+        };
+
+        // Tạo biểu đồ
+        var hourlyChart = new Chart(document.getElementById('hourly-chart'), {
+            type: 'bar', // Loại biểu đồ là bar (hình cột)
+            data: hourlyData,
+            options: {
+                responsive: true, // Biểu đồ có thể đáp ứng kích thước
+                scales: {
+                    y: {
+                        beginAtZero: true // Bắt đầu trục y từ 0
+                    }
+                }
+            }
+        });
+
+        // Lấy ngày tháng năm hôm nay
+        var today = new Date();
+        var currentDateElement = document.getElementById('current-date');
+        currentDateElement.textContent = today.toLocaleDateString();
+
+
+
+        function handleRegionChange(event) {
+            const selectedRegion = event.target.value;
+            if (selectedRegion !== 'Hà Nội') {
+                redirectToLogin();
+            }
+        }
+
+        function redirectToLogin() {
+            window.location.href = 'login.html';
+        }
+
+    </script>
+
+
+
+    <footer>
+        <div class="footer-center">© Nhóm IoT - 2023</div>
+        <div class="footer-right">
+            <span>GitHub:</span>
+            <a href="https://github.com/TranNgocBao12062003/ProjectIOT">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+    </footer>
+</body>
+
+</html>
