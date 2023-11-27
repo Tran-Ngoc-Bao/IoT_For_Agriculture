@@ -31,7 +31,7 @@ export function subscribeDevice(id) {
         {
         "data": 
             {
-                "time": "10-02-2023",
+                "time": "2023-02-12",
                 "value": 37
             }
         }
