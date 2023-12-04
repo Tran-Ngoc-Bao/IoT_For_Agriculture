@@ -145,14 +145,41 @@ void loop() {
   int minute = ltm.tm_min;
   int second = ltm.tm_sec;
 
+  String smo, sd, sh, smi, ss;
+  if (month < 10) {
+    smo = "0" + String(month);
+  } else {
+    smo = String(month);
+  }
+  if (day < 10) {
+    sd = "0" + String(day);
+  } else {
+    sd = String(day);
+  }
+  if (hour < 10) {
+    sh = "0" + String(hour);
+  } else {
+    sh = String(hour);
+  }
+  if (minute < 10) {
+    smi = "0" + String(minute);
+  } else {
+    smi = String(minute);
+  }
+  if (second < 10) {
+    ss = "0" + String(second);
+  } else {
+    ss = String(second);
+  }
+
   if (!client.connected()) {
     reconnectMQTTBroker();
   }
   client.loop();
 
   // Convert data to Json file
-  String t = String(year) +  "-" + String(month) + "-" + String(day) + "T";
-  t += String(hour) + ":" + String(minute) + ":" + String(second) + "Z";
+  String t = String(year) +  "-" + smo + "-" + sd + "T";
+  t += sh + ":" + smi + ":" + ss + "Z";
   String msg = "{\"data\":{\"time\":\"" + t + "\",";
   msg += "\"value\":" + String(deep) + "}}";
   
