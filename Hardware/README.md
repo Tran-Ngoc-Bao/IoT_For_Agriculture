@@ -1,4 +1,4 @@
-## File> Preferences
+## File > Preferences
 Additional Boards Manager URLS: https://dl.espressif.com/dl/package_esp32_index.json
 ## Tools > Board > Boards Manager
 Install esp32

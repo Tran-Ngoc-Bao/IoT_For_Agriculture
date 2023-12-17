@@ -30,7 +30,7 @@
 
 ## Giới thiệu bài tập lớn
 <ul>
-  <li>Tên đề tài: Hệ thống đo mực nước đầu nguồn phục vụ nông nghiệp</li>
+  <li>Tên đề tài: <strong>Hệ thống đo mực nước đầu nguồn phục vụ nông nghiệp</strong></li>
   <li>Đo mực nước theo từng khoảng thời gian ở các địa điểm đầu nguồn</li>
   <li>Gửi, biểu diễn dữ liệu trên website để người đăng ký có thể xem</li>
   <li>Gửi email cảnh báo khi có sự bất thường ở đầu nguồn</li>
@@ -38,16 +38,20 @@
 
 ## Cài đặt hệ thống
 <ul>
-  <li>Các thiết bị cần mua: ESP32, HCSR04</li>
-  <li>Các ứng dụng, framework, thư viện cần cài đặt: Arduino IDE, Visual Studio Code, MQTT explorer, NodeJs, MQTT library</li>
+  <li>Các thiết bị cần thiết: <strong>Cáp type C, Dây nối 40P, ESP32, HCSR04</strong></li>
+  <li>Những phần mềm ứng dụng cần cài đặt: <strong>Arduino IDE, MongoDB, MQTT explorer, Visual Studio Code</strong></li>
+  <li>Cùng với MQTT broker miễn phí được hỗ trợ bởi <strong>HiveMQ Cloud</strong></li>
 </ul>
 
 ## Hướng dẫn sử dụng 
 <ul>
-  <li>Mua các thiết bị, tải các phần mềm như trên</li>
-  <li>Tải các đoạn code hardware, back-end, front-end về máy</li>
-  <li>Kết nối cảm biến với ESP32 rồi kết nối tới máy tính</li>
-  <li>Khởi động hệ thống</li>
+  <li>Lắp ghép mạch, kết nối các thiết bị với nhau</li>
+  <li>Clone repository về máy tính cá nhân</li>
+  <li>Khởi động MQTT broker free của <strong>HiveMQ Cloud</strong> để chuẩn bị nhận dữ liệu</li>
+  <li>Chạy các đoạn code trong Hardware nhờ Arduino IDE để bắt đầu <strong>publish dữ liệu lên MQTT broker</strong></li>
+  <li>Tiến hành mở web server bằng <strong>NodeJS</strong> trong Back-end để <strong>subcribe dữ liệu từ MQTT broker</strong></li>
+  <li>Lưu dữ liệu nhận được vào <strong>MongoDB</strong>, đồng thời hiển thị Website của hệ thống</li>
+  <li>XEM CHI TIẾT TRONG BÁO CÁO BÀI TẬP LỚN</li>
 </ul>
 
 ## Báo cáo bài tập lớn
