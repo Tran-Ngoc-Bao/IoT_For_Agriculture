@@ -2,12 +2,8 @@ import express from "express";
 
 import {
     Device,
-    createDevice,
-    deleteDeviceById,
-    getDeviceById,
     getDeviceDataInRange,
     getDeviceDataWithTime,
-    getDevices,
 } from "../models/deviceModel.js";
 
 import { deviceClientMQTT, subscribeDevice } from "../../app.js";
@@ -23,7 +19,16 @@ export const getAllDevicesController = async (req, res) => {
     }
 }
 
-
+export const getDeviceController = async (req, res) => {
+    try {
+        const { id, address } = req.query;
+        const device = await Device.findById(id) || await Device.findOne({ address: address });
+        return res.status(200).json(device)
+    } catch (error) {
+        console.log("[GE_DEVICE_ERROR]", error);
+        return res.sendStatus(400);
+    }
+}
 
 export const createDeviceController = async (req, res) => {
     try {
@@ -48,14 +53,14 @@ export const createDeviceController = async (req, res) => {
 
 export const updateDeviceController = async (req, res) => {
     try {
-        const { id } = req.query;
-        const { address } = req.body;
+        // const { id, oldAddress } = req.query;
+        const { id, address } = req.body;
 
         if (!address) {
             return res.sendStatus(400);
         }
 
-        const device = Device.findByIdAndUpdate(id, {
+        const device = await Device.findByIdAndUpdate(id, {
             address: address,
         });
 
@@ -71,9 +76,9 @@ export const updateDeviceController = async (req, res) => {
 
 export const deleteDeviceController = async (req, res) => {
     try {
-        const { id } = req.query;
+        const { id, address } = req.query;
 
-        const deletedDevice = await Device.findOneAndDelete({ _id: id });
+        const deletedDevice = await Device.findOneAndDelete({ _id: id }) || await Device.findOneAndDelete({ address: address });
 
         deviceClientMQTT[id].end();
         delete deviceClientMQTT[id];
@@ -88,6 +93,8 @@ export const deleteDeviceController = async (req, res) => {
     }
 }
 
+
+// 
 export const getDeviceDataInRangeController = async (req, res) => {
     try {
         const { id, start, end } = req.body;
