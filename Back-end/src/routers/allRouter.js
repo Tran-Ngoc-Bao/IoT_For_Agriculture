@@ -3,6 +3,7 @@ import {
     createDeviceController,
     deleteDeviceController,
     getAllDevicesController,
+    getDeviceController,
     getDeviceDataInRangeController,
     getDeviceDataWithTimeController,
     updateDeviceController
@@ -36,17 +37,19 @@ router.get("/testjwt", verifyToken, function (req, res) {
             });
     }
 });
-
+//
+router.get("/", (req, res) => {
+    res.sendFile("login.html", { root: "../../../Front-end" });
+})
 // device
 router.get("/devices", getAllDevicesController)
+router.get("/devices", getDeviceController)
 router.post("/devices", createDeviceController)
 router.delete("/devices", deleteDeviceController);
 router.put("/devices", updateDeviceController);
 router.post("/devices/data-in-range", getDeviceDataInRangeController);
 router.post("/devices/data-with-time", getDeviceDataWithTimeController);
 
-// auth
-// router.use(verifyToken)
 // user
 router.get("/user", verifyToken, getUser);
 

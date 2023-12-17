@@ -1,5 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
 import router from './src/routers/allRouter.js';
 import { subscribeApp } from './app.js';
 import cors from 'cors';
@@ -14,6 +17,10 @@ try {
     console.log(error);
 }
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+app.use(express.static("public"));
+
 app.use(cors({
     credentials: true
 }));
@@ -21,7 +28,11 @@ app.use(cors({
 // parse requests of content-type - application/json
 app.use(express.json());
 
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
+
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/public/login.html");
+});
 
 app.use("/api", router)
 

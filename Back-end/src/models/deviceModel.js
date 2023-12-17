@@ -31,6 +31,9 @@ export const updateDeviceById = async (id, newData) => {
     })
         .then(() => console.log("add new data into device successfully!"));
 };
+
+
+
 //
 export const getDeviceDataInRange = async (id, startDate, endDate) => {
     const device = await Device.findById(id);
