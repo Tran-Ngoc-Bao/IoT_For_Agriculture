@@ -6,7 +6,8 @@ export const signup = (req, res) => {
     const user = new User({
         fullName: req.body.fullName,
         email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8)
+        password: bcrypt.hashSync(req.body.password, 8),
+        addresses: [req.body.address]
     });
 
     user.save()
@@ -20,6 +21,7 @@ export const signup = (req, res) => {
             } else {
                 res.status(200)
                     .send({
+                        newUser: user,
                         message: "User Registered successfully"
                     })
             }
@@ -66,13 +68,14 @@ export const signin = async (req, res) => {
                     id: user._id,
                     email: user.email,
                     fullName: user.fullName,
+                    addresses: user.addresses,
                 },
                 message: "Login successfull",
                 accessToken: token,
             });
     } catch (error) {
         console.log(error);
-        return res.status.json({
+        return res.status(500).json({
             message: "Internal error",
         })
     }

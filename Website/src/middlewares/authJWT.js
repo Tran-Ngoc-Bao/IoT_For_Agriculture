@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/userModel.js";
 
-export const verifyToken = (req, res, next) => {
+export const verifyToken = async (req, res, next) => {
     if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-        jwt.verify(req.headers.authorization.split(' ')[1], process.env.SECRET_KEY, (err, decode) => {
+        jwt.verify(req.headers.authorization.split(' ')[1], process.env.SECRET_KEY, async (err, decode) => {
             if (err) {
                 console.log(err);
                 return res.status(500).json({
@@ -12,7 +12,7 @@ export const verifyToken = (req, res, next) => {
             }
 
             try {
-                const user = User.findOne({
+                const user = await User.findOne({
                     _id: decode.id
                 })
 
