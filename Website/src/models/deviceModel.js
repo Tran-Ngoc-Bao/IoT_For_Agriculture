@@ -4,7 +4,7 @@ const deviceSchema = new mongoose.Schema({
     address: { type: String },
     data: [
         {
-            time: { type: Date },
+            time: { type: Date, default: Date.now },
             value: { type: Number },
         }
     ]

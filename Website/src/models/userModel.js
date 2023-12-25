@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    addresses: [String],
     created: {
         type: Date,
         default: Date.now
