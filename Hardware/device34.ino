@@ -5,7 +5,7 @@
 
 int trigger_pin = 5;
 int echo_pin = 18;
-int deep_max = 400;
+float deep_max = 4;
 
 const char* ssid = "Chcken";
 const char* password = "0377752925";
@@ -47,10 +47,8 @@ const char* root_ca =
 "emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=\n" \
 "-----END CERTIFICATE-----\n";
 
-const char* ntpServer = "pool.ntp.org";
-const long gmtOffset_sec = 0;
-const int daylightOffset_sec = 3600;
-struct tm ltm;
+float sum = 0;
+int cnt = 0;
 
 WiFiClientSecure espClient;
 PubSubClient client(espClient);
@@ -79,27 +77,15 @@ void reconnectMQTTBroker() {
     } else {
       Serial.print("Failed with state ");
       Serial.println(client.state());
-      delay(1000);
     }
-  }
-}
-
-void reconnectNTPServer() {
-  Serial.println("");
-  
-  while (!getLocalTime(&ltm)) {
-    Serial.println("Connecting to NTP...");
     delay(1000);
   }
-
-  Serial.println("");
 }
 
 void setup() {
   Serial.begin(115200);
   pinMode(trigger_pin, OUTPUT);
   pinMode(echo_pin, INPUT);
-  delay(1000);
 
   // Set up WiFi
   WiFi.begin(ssid, password);
@@ -109,11 +95,8 @@ void setup() {
   espClient.setCertificate(root_ca);
   client.setServer(mqttServer, 8883);
 
-  // Init and get the time
-  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
-}
-
 void loop() {
+  Serial.println("BAO");
   // Create pulse 10 micro seconds
   digitalWrite(trigger_pin, LOW);
   delayMicroseconds(2);
@@ -125,51 +108,12 @@ void loop() {
   long duration = pulseIn(echo_pin, HIGH);
 
   // s = v * t (v: sound speed)
-  int distance_cm = (duration / 2) / 29.09;
-  int deep = deep_max - distance_cm;
+  float distance = ((float)duration / 2) / 2909;
+  float deep = deep_max - distance;
   Serial.println(deep);
 
   if (WiFi.status() != WL_CONNECTED) {
     reconnectWiFi();
-  }
-
-  if(!getLocalTime(&ltm)){
-    reconnectNTPServer();
-  }
-
-  // Get current time
-  int year = 1900 + ltm.tm_year;
-  int month = 1 + ltm.tm_mon;
-  int day = ltm.tm_mday;
-  int hour = ltm.tm_hour;
-  int minute = ltm.tm_min;
-  int second = ltm.tm_sec;
-
-  String smo, sd, sh, smi, ss;
-  if (month < 10) {
-    smo = "0" + String(month);
-  } else {
-    smo = String(month);
-  }
-  if (day < 10) {
-    sd = "0" + String(day);
-  } else {
-    sd = String(day);
-  }
-  if (hour < 10) {
-    sh = "0" + String(hour);
-  } else {
-    sh = String(hour);
-  }
-  if (minute < 10) {
-    smi = "0" + String(minute);
-  } else {
-    smi = String(minute);
-  }
-  if (second < 10) {
-    ss = "0" + String(second);
-  } else {
-    ss = String(second);
   }
 
   if (!client.connected()) {
@@ -177,18 +121,21 @@ void loop() {
   }
   client.loop();
 
-  // Convert data to Json file
-  String t = String(year) +  "-" + smo + "-" + sd + "T";
-  t += sh + ":" + smi + ":" + ss + "Z";
-  String msg = "{\"data\":{\"time\":\"" + t + "\",";
-  msg += "\"value\":" + String(deep) + "}}";
-  
-  // Publish data to MQTT Broker
-  char buffer[msg.length() + 1];
-  msg.toCharArray(buffer, msg.length() + 1);
-  client.publish("device/3", buffer);
-  client.publish("device/4", buffer);
-  
-  delay(3000);
+  sum += deep;
+  ++cnt;
+  if (cnt % 6 == 5) {
+    // Publish data to MQTT Broker
+    String msg = (String) (sum / 5);
+    Serial.println(msg);
+    char buffer[msg.length() + 1];
+    msg.toCharArray(buffer, msg.length() + 1);
+    client.publish("device/3", buffer);
+    client.publish("device/4", buffer);
+    sum = 0;
+    ++cnt;
+  } 
 
+  // Sync
+  unsigned long t = cnt * 6000;
+  delay(t - millis());
 }
