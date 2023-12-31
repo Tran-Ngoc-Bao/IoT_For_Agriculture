@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tài khoản</title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <style>
+        /* Media query cho điện thoại */
+        @media (max-width: 767px) {
+            body {
+                padding: 0px;
+                box-sizing: border-box;
+                margin: 0;
+                font-weight: 300;
+            }
+
+            main {
+                width: 95%;
+                margin-top: 50px;
+            }
+
+            section {
+                width: 95%;
+                padding: 5px;
+                border: black 1px solid;
+                border-radius: 10px;
+                margin-left: 5%;
+                text-align: left;
+            }
+
+            .custom-button {
+                float: right;
+                padding-left: 5px;
+                padding-right: 5px;
+                border-radius: 10px;
+                background-color: antiquewhite;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-left" style="margin-top: 20px;">
+            <h1>
+                <pre> Nhóm BCHL</pre>
+            </h1>
+        </div>
+        <nav class="header-center">
+            <ul>
+                <li><a href="./home.html">Trang chủ</a></li>&nbsp;&nbsp;&nbsp;&nbsp;
+                <li><a href="https://github.com/TranNgocBao12062003/ProjectIOT">Liên hệ</a></li>
+            </ul>
+        </nav>
+        <div class="header-right">
+            <a href="./login.html"><button class="logout-button">Đăng xuất</button></a>
+        </div>
+    </header>
+
+    <main>
+        <section>
+            <h3 style="text-align: center; margin-bottom: 40px;">Thông tin tài khoản</h3>
+            <h4>Tài khoản: <p id="username">User</p>
+            </h4>
+            <h4>Email: <p id="email">user@gmail.com</p> <button class="custom-button change-email"><a
+                        href="./change-email.html">Đổi email</a></button></h4>
+            <h4>Mật khẩu: <p id="password">***</p> <button class="custom-button change-password"><a
+                        href="./change-password.html">Đổi mật khẩu</a></button></h4>
+            <h4>Khu vực: <p id="regions"></p>
+            </h4>
+            <h4>Thêm khu vực: <select id="newRegion" aria-label="State" name="region" required
+                    style="margin-left: 25px;">
+                    <option value="Hòa Bình">Hòa Bình</option>
+                    <option value="Lai Châu">Lai Châu</option>
+                    <option value="Nam Định">Nam Định</option>
+                    <option value="Sơn La">Sơn La</option>
+                    <option value="Hà Nội">Hà Nội</option>
+                </select><button class="custom-button add">Thêm</button></h4>
+            <h4>Xóa khu vực: <select id="removeRegion" aria-label="State" name="region" required
+                    style="margin-left: 43px;">
+                    <option value="Hòa Bình">Hòa Bình</option>
+                    <option value="Lai Châu">Lai Châu</option>
+                    <option value="Nam Định">Nam Định</option>
+                    <option value="Sơn La">Sơn La</option>
+                    <option value="Hà Nội">Hà Nội</option>
+                </select><button class="custom-button remove">Xóa</button></h4>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-center">© Nhóm BCHL</div>
+        <div class="footer-right">
+            <span>GitHub:</span>
+            <a href="https://github.com/TranNgocBao12062003/ProjectIOT">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+    </footer>
+
+    <script>
+
+
+        // Lấy thông tin tài khoản
+        fetch('http://localhost:8000/api/user', {
+            method: 'GET',
+            headers: {
+                authorization: 'JWT ' + localStorage.getItem('token') // Gửi mã thông báo hoặc session trong tiêu đề Authorization
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Request failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Cập nhật nội dung trên trang
+                document.getElementById('username').textContent = data.fullName;
+                document.getElementById('email').textContent = data.email;
+                //document.getElementById('password').textContent = data.password;
+                document.getElementById('regions').textContent = data.addresses.join(', ');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        // Xử lý sự kiện khi nhấn nút "Thêm"
+        document.querySelector('.add').addEventListener('click', function () {
+            var newRegion = document.getElementById('newRegion').value;
+
+            var addresses = document.getElementById('regions').textContent;
+
+            if (addresses.includes(newRegion)) {
+                alert('Địa chỉ đã tồn tại.');
+            }
+            else {
+                var url = 'http://localhost:8000/api/user/address?isAdd=1&address=' + newRegion;
+
+
+                fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        authorization: 'JWT ' + localStorage.getItem('token')
+                    }
+                })
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        if (data.status === 0) {
+                            alert('Lỗi: Không thể thêm địa chỉ.');
+                            location.reload();
+                        } else if (data.status === 1) {
+                            alert('Thêm địa chỉ thành công.');
+                            location.reload();
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log('Lỗi:', error);
+                    });
+            }
+        });
+
+        // Xử lý sự kiện khi nhấn nút "Xóa"
+        document.querySelector('.remove').addEventListener('click', function () {
+            var newRegion = document.getElementById('removeRegion').value;
+
+            var addresses = document.getElementById('regions').textContent;
+
+            if (!addresses.includes(newRegion)) {
+                alert('Địa chỉ không có trong danh sách.');
+            }
+            else {
+                var url = 'http://localhost:8000/api/user/address?isAdd=-1&address=' + newRegion;
+
+
+                fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        authorization: 'JWT ' + localStorage.getItem('token')
+                    }
+                })
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        if (data.status === 0) {
+                            alert('Lỗi: Không thể xóa địa chỉ.');
+                            location.reload();
+                        } else if (data.status === 1) {
+                            alert('Xóa địa chỉ thành công.');
+                            location.reload();
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log('Lỗi:', error);
+                    });
+            }
+        });
+    </script>
