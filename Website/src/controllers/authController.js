@@ -10,21 +10,38 @@ export const signup = (req, res) => {
         addresses: [req.body.address]
     });
 
-    user.save()
+    /*user.save()
         .then((err, user) => {
             if (err) {
                 res.status(500)
                     .send({
-                        message: err
+                        message: err,
+                        status : 0
                     });
                 return;
             } else {
                 res.status(200)
                     .send({
                         newUser: user,
-                        message: "User Registered successfully"
+                        message: "User Registered successfully",
+                        status : 1
                     })
             }
+        });         // có lỗi: .save() trong Mongoose không trả về một đối tượng lỗi trong hàm .then() */ 
+
+        user.save()
+        .then((user) => {
+            res.status(200).send({
+                newUser: user,
+                message: "User Registered successfully",
+                status: 1
+            });
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: err,
+                status: 0
+            });
         });
 };
 
@@ -37,7 +54,8 @@ export const signin = async (req, res) => {
         if (!user) {
             return res.status(404)
                 .send({
-                    message: "User Not found."
+                    message: "Người dùng không tồn tại.",
+                    status : 0,
                 });
         }
 
@@ -51,14 +69,15 @@ export const signin = async (req, res) => {
             return res.status(401)
                 .send({
                     accessToken: null,
-                    message: "Invalid Password!"
+                    message: "Sai mật khẩu!",
+                    status : 0,
                 });
         }
         //signing token with user id
         var token = jwt.sign({
             id: user.id
         }, process.env.SECRET_KEY, {
-            expiresIn: process.env.TIME_EXPIRED
+            expiresIn: process.env.TIME_EXPIRED         
         });
 
         //responding to client request with user profile success message and  access token .
@@ -70,13 +89,15 @@ export const signin = async (req, res) => {
                     fullName: user.fullName,
                     addresses: user.addresses,
                 },
-                message: "Login successfull",
+                message: "Đăng nhập thành công",
                 accessToken: token,
+                status : 1,
             });
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            message: "Internal error",
+            message: "Đã xảy ra lỗi",
+            status : 0,
         })
     }
 };

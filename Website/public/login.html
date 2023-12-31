@@ -10,12 +10,44 @@
         $(document).ready(function () {
             $("#login-button").click(function (event) {
                 event.preventDefault();
-                $('.container h1').text('Đăng nhập thành công');
-                $('form').fadeOut(500);
-                $('.wrapper').addClass('form-success');
-                setTimeout(function () {
-                    window.location.href = "./home.html";
-                }, 1500); // Đợi 1.5 giây trước khi chuyển hướng
+
+                var username = $("input[type='text']").val();
+                var password = $("input[type='password']").val();
+
+                var data = {
+                    email: username,
+                    password: password
+                };
+
+                fetch("http://localhost:8000/api/sign-in", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.status === 1) {
+                            $('.container h1').text('Đăng nhập thành công');
+                            $('form').fadeOut(500);
+                            $('.wrapper').addClass('form-success');
+
+                            const token = result.accessToken; 
+                            localStorage.setItem('token', token);
+                            localStorage.setItem('password', data.password);
+
+                            setTimeout(function () {
+                                window.location.href = "./home.html";
+                            }, 1500); // Đợi 1.5 giây trước khi chuyển hướng
+                        } else {
+                            alert(result.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        alert("Đã xảy ra lỗi trong quá trình xử lý yêu cầu.");
+                    });
             });
         });
     </script>
@@ -44,7 +76,7 @@
             <h1>Đăng nhập</h1>
 
             <form class="form">
-                <input type="text" placeholder="Tên tài khoản">
+                <input type="text" placeholder="Nhập email">
                 <input type="password" placeholder="Mật khẩu">
                 <button type="submit" id="login-button">Đăng nhập</button>
                 <button class="forget-password"><a href="./change-password.html">Quên mật khẩu</a></button>
