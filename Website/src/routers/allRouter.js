@@ -21,7 +21,7 @@ const router = express.Router();
 
 // sign
 router.post("/sign-up", signup);
-router.post("/sign-in", signin)
+router.post("/sign-in", signin);
 //
 router.get("/", (req, res) => {
     res.sendFile("login.html", { root: "../../../Front-end" });

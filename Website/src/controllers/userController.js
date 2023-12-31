@@ -1,5 +1,6 @@
 import { Device } from "../models/deviceModel.js";
 import { User } from "../models/userModel.js";
+import bcrypt from "bcrypt";
 
 export const getUserController = async (req, res) => {
     const user = req.user;
@@ -13,21 +14,23 @@ export const getUserController = async (req, res) => {
 
 export const updateUserController = async (req, res) => {
     const oldUser = req.user;
-    const { fullName, email } = req.body;
+    const { password, email } = req.body;
 
-    if (!fullName && !email) {
+    if (!password && !email) {
         return res.status(400).json({
             message: "Missing requirement!",
+            status: 0,
         });
     }
     const newUser = await User.updateOne({ _id: oldUser._id }, {
-        fullName: fullName,
+        password: bcrypt.hashSync(password, 8),
         email: email
     });
 
     return res.status(200).json({
         message: "Update user successfully!",
-        newUser
+        newUser,
+        status: 1,
     });
 }
 
@@ -78,12 +81,14 @@ export const updateAddressController = async (req, res) => {
     if (!user) {
         return res.status(500).json({
             message: "can not add new address",
+            status: 0,
         });
     }
 
     return res.status(200).json({
         message: "add new address successfully!",
-        user
+        user,
+        status: 1,
     });
 }
 
