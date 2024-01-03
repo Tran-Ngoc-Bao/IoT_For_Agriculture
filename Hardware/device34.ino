@@ -96,7 +96,6 @@ void setup() {
   client.setServer(mqttServer, 8883);
 
 void loop() {
-  Serial.println("BAO");
   // Create pulse 10 micro seconds
   digitalWrite(trigger_pin, LOW);
   delayMicroseconds(2);
@@ -136,6 +135,6 @@ void loop() {
   } 
 
   // Sync
-  unsigned long t = cnt * 6000;
+  unsigned long t = cnt * 600000;
   delay(t - millis());
 }
