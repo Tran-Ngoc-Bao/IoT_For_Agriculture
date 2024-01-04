@@ -124,28 +124,65 @@ export const getAddressData = async (req, res) => {
 }
 
 export const getAddressDataByDate = async (req, res) => {
-    const { address } = req.params;
+    const { address } = req.query;
+    console.log("[ADDRESS]", address)
     const { year, month, date } = req.query;
+
     let yearN = parseInt(year);
     let monthN = parseInt(month);
     let dateN = parseInt(date);
 
-    const startDate = new Date(yearN, monthN - 1, dateN);
-    const endDate = new Date(yearN, monthN - 1, dateN + 1);
+    // const startDate = new Date(yearN, monthN - 1, dateN); // ngày cần lấy dữ liệu
+    // const endDate = new Date(yearN, monthN - 1, dateN + 1);
 
+    // sửa 1 chút tại thấy ngày tháng lấy ra vẫn bị chậm 1 ngày
+    const startDate = new Date(yearN, monthN - 1, dateN + 1);   // ngày cần lấy dữ liệu
+    const endDate = new Date(yearN, monthN - 1, dateN + 2); 
+
+    const currTime = new Date(); // thời gian hiện tại
+    const nextTime = new Date(currTime.getFullYear(), currTime.getMonth(), currTime.getDate() + 1)
     try {
         const device = await Device.findOne({ address: address });
 
         if (!device) {
             return res.status(404).json({ message: 'Device not found' });
         }
+        // lấy dữ liệu cho thời gian hiện tại
+        let currData = device.data.filter((data) => {
+            return data.time >= currTime && data.time < nextTime;
+        });
 
-        const data = device.data.filter((data) => {
-            console.log(data.time, startDate, endDate);
+        let newCurrData = Array.from({ length: 24 }, () => ({ time: currTime, value: 0 }));
+        currData.forEach((item) => {
+            newCurrData[item.time.getHours()] = item;
+        });
+        const currHour = newCurrData[currTime.getHours()] ? newCurrData[currTime.getHours()].value : 0;
+        const prevHour = newCurrData[currTime.getHours() - 1] ? newCurrData[currTime.getHours() - 1].value : 0;
+
+        // lấy dữ liệu cho ngày được chỉ định
+        let data = device.data.filter((data) => {
             return data.time >= startDate && data.time < endDate;
         });
 
-        return res.status(200).json(data);
+        let newArray = Array.from({ length: 24 }, () => ({ time: data.time, value: 0 }));
+        data.forEach((item) => {
+            newArray[item.time.getHours()] = item;
+        });
+        // if (data.length < 24) {
+        //     let frontArray = Array.from({ length: (data[0].time.getHours()) }, () => ({ time: data.time, value: 0 }));
+        //     data = frontArray.concat(data);
+        //     let endArray = Array.from({ length: (23 - data[data.length - 1].time.getHours()) }, () => ({ time: data.time, value: 0 }));
+        //     data = data.concat(endArray);
+        // }
+
+        // const currHour = newArray[time.getHours()].value;
+        // const prevHour = newArray[time.getHours() - 1].value;
+
+        return res.status(200).json({
+            currHour,
+            prevHour,
+            data: newArray,
+        });
     } catch (error) {
         console.log("GET_DATA_BY_DATE_ERROR", error);
         res.status(500).json({

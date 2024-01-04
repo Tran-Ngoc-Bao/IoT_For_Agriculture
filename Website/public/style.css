@@ -347,6 +347,22 @@ body .chart-container {
     padding: 20px;
 }
 
+body .chart-title-container {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%;
+    position: relative;
+}
+
+body .chart-title {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    margin: 0;
+}
+
 body .table-container {
     width: 30%;
     float: right;

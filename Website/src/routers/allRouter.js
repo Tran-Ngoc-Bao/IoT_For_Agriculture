@@ -21,7 +21,7 @@ const router = express.Router();
 
 // sign
 router.post("/sign-up", signup);
-router.post("/sign-in", signin);
+router.post("/sign-in", signin)
 //
 router.get("/", (req, res) => {
     res.sendFile("login.html", { root: "../../../Front-end" });
@@ -39,9 +39,12 @@ router.put("/devices", updateDeviceController);
 router.get("/user", verifyToken, getUserController);
 router.put("/user", verifyToken, updateUserController)
 router.delete("/user", verifyToken, deleteUserController);
+// router.get("/user", getUserController);
+// router.put("/user", updateUserController)
+// router.delete("/user", deleteUserController);
 // them/xoa dia chi
 router.put("/user/address", verifyToken, updateAddressController);
 // chon khu vuc hien thi du lieu
 router.get("/user/address", getAddressData)
-router.get("/user/address/:address", getAddressDataByDate);
+router.get("/user/address/date", getAddressDataByDate);
 export default router;

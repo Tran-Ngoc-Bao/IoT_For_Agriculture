@@ -36,7 +36,7 @@
                     localStorage.setItem('_id', data._id);
                     localStorage.setItem('fullName', data.fullName);
                     localStorage.setItem('email', data.email);
-                    localStorage.setItem('adresses',  data.addresses.join(', '));
+                    localStorage.setItem('adresses', data.addresses.join(', '));
                 })
                 .catch(error => {
                     console.log(error);
@@ -71,9 +71,13 @@
             <div class="date-select">
                 <label for="date-input">Chọn ngày:</label>
                 <input type="date" id="date-input">
-                <button class="btn btn-primary" onclick="updateChart()">Xem</button>
+                <button class="btn btn-primary" onclick="updateTimeChart()">Xem</button>
             </div>
         </div>
+        <div class="chart-title-container">
+            <h2 class="chart-title">Mực nước theo giờ</h2>
+        </div>
+        <div id="error-message" class="error-message"></div>
         <canvas id="hourly-chart"></canvas>
     </div>
 
@@ -85,12 +89,12 @@
         <button class="account" id="fullname"><a href="./account.html">User</a></button>
         <div class="mb-3">
             <h5>Chọn khu vực</h5>
-            <select class="form-select" aria-label="Khu vực">
-                <option value="region1">Hà Nội</option>
-                <option value="region2">Hòa Bình</option>
-                <option value="region3">Lai Châu</option>
-                <option value="region4">Nam Định</option>
-                <option value="region5">Sơn La</option>
+            <select id="regionSelect" class="form-select" aria-label="Khu vực">
+                <option value="Hà Nội">Hà Nội</option>
+                <option value="Hòa Bình">Hòa Bình</option>
+                <option value="Lai Châu">Lai Châu</option>
+                <option value="Nam Định">Nam Định</option>
+                <option value="Sơn La">Sơn La</option>
                 <!-- Thêm các khu vực khác vào đây -->
             </select>
             <button class="custom-button OK" onclick="changeMap()">Chọn</button>
@@ -106,10 +110,10 @@
     <script>
         // Dữ liệu mẫu cho biểu đồ
         var hourlyData = {
-            labels: ['0h', '1h', '2h', '3h', '4h', '5h', '6h', '7h', '8h', '9h', '10h', '11h', '12h', '13h', '14h', '15h', '16h', '17h', '18h', '19h', '20h', '21h', '22h', '23h'], // Các nhãn trục x
+            labels: ['00h', '01h', '02h', '03h', '04h', '05h', '06h', '07h', '08h', '09h', '10h', '11h', '12h', '13h', '14h', '15h', '16h', '17h', '18h', '19h', '20h', '21h', '22h', '23h'], // Các nhãn trục x
             datasets: [{
                 label: 'Mực nước (m)',
-                data: [5, 2.5, 4, 6, 3, 4.5, 5.5, 4, 6, 3, 4.5, 5.5, 5, 2.5, 4, 6, 3, 4.5, 5.5, 4, 6, 3, 4.5, 5.5], // Dữ liệu mực nước tương ứng với từng giờ
+                data: [], // Dữ liệu mực nước tương ứng với từng giờ
                 backgroundColor: 'rgba(54, 162, 235, 0.5)', // Màu nền cột
                 borderColor: 'rgba(54, 162, 235, 1)', // Màu viền cột
                 borderWidth: 1 // Độ rộng viền cột
@@ -130,77 +134,117 @@
             }
         });
 
+        var region = document.querySelector('.form-select');
+        var map = document.querySelector('iframe');
+
         // Lấy ngày tháng năm hôm nay
         var today = new Date();
         var currentDateElement = document.getElementById('current-date');
         currentDateElement.textContent = today.toLocaleDateString();
 
-        // Lấy thẻ input và nút cập nhật
-        var dateInput = document.getElementById('date-input');
-        var updateButton = document.querySelector('.date-select button');
+        function updateTimeChart() {
+            const dateInput = document.getElementById('date-input');
+            const selectedDate = new Date(dateInput.value);
 
-        // Sự kiện khi nút cập nhật được nhấn
-        updateButton.addEventListener('click', function () {
-            var selectedDate = dateInput.value;
-            // Cập nhật biểu đồ với ngày tháng đã chọn
-            updateChart(selectedDate);
-        });
+            var year2 = selectedDate.getFullYear();
+            var month2 = selectedDate.getMonth() + 1;
+            var day2 = selectedDate.getDate();
 
-        // Hàm cập nhật biểu đồ với ngày tháng đã chọn
-        function updateChart(selectedDate) {
-            // Chuyển đổi chuỗi ngày tháng đã chọn thành đối tượng Date
-            var date = new Date(selectedDate);
-
-            // Lấy ngày, tháng và năm từ đối tượng Date
-            var day = date.getDate();
-            var month = date.getMonth() + 1; // Tháng bắt đầu từ 0, cần cộng thêm 1
-            var year = date.getFullYear();
-
-            // Hiển thị ngày tháng đã chọn
             var currentDateElement = document.getElementById('current-date');
-            currentDateElement.textContent = day + '/' + month + '/' + year;
+            var formattedDate = `${day2}/${month2}/${year2}`;
+            currentDateElement.textContent = formattedDate;
 
-            // Thực hiện logic cập nhật biểu đồ với ngày tháng đã chọn
-            // ...
-            event.preventDefault(); // Ngăn trình duyệt tải lại trang
-            var selectedDate = dateInput.value;
-            // Cập nhật biểu đồ với ngày tháng đã chọn
-            updateChartNew(selectedDate);
+            updateChart(region.value, year2, month2, day2);
         }
 
-        var region = document.querySelector('.form-select');
-        var map = document.querySelector('iframe');
+
+        // Hàm cập nhật biểu đồ với dữ liệu đã lấy
+        async function updateChart(address, year, month, day) {
+            try {
+                const response = await fetch(`http://localhost:8000/api/user/address/date?year=${year}&month=${month}&date=${day}&address=${address}`, {
+                    method: 'GET',
+                    headers: {
+                        authorization: 'JWT ' + localStorage.getItem('token')
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Request failed');
+                }
+
+                const responseData = await response.json();
+                const { currHour, prevHour, data } = responseData;
+
+                // Chuẩn bị dữ liệu cho biểu đồ
+                const labels = [];
+                const chartData = [];
+
+                for (let i = 0; i < 24; i++) {
+                    const hour = i.toString().padStart(2, '0');
+                    labels.push(hour + 'h');
+
+                    const hourData = data.find(item => {
+                        const itemTime = new Date(item.time);
+                        return itemTime.getHours() === i;
+                    });
+                    chartData.push(hourData ? hourData.value : 0);
+                }
+
+                // Cập nhật biểu đồ
+                hourlyChart.data.labels = labels;
+                hourlyChart.data.datasets[0].data = chartData;
+                hourlyChart.update();
+
+                /* // In giá trị currHour và prevHour (nếu cần)
+                 console.log('Current hour:', currHour);
+                 console.log('Previous hour:', prevHour);*/
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+
+
+
 
         function changeMap() {
+            var addresses = localStorage.getItem('adresses');
+            var selectedRegion = region.value;
+        
+            if (!addresses.includes(selectedRegion)) {
+                alert(`Địa chỉ: "${selectedRegion}" chưa được thêm`);
+                return;
+            }
+
             switch (region.value) {
-                case "region2":
+                case "Hòa Bình":
                     map.src = "https://maps.google.com/maps?q=nhà máy thủy điện hòa bình&t=&z=10&ie=UTF8&iwloc=&output=embed";
                     break;
-                case "region3":
+                case "Lai Châu":
                     map.src = "https://maps.google.com/maps?q=Nhà máy thủy điện Lai Châu&t=&z=10&ie=UTF8&iwloc=&output=embed";
                     break;
-                case "region4":
+                case "Nam Định":
                     map.src = "https://maps.google.com/maps?q=tượng đài Trần Hưng Đạo&t=&z=10&ie=UTF8&iwloc=&output=embed";
                     break;
-                case "region5":
+                case "Sơn La":
                     map.src = "https://maps.google.com/maps?q=Nhà máy thủy điện Sơn La&t=&z=10&ie=UTF8&iwloc=&output=embed";
                     break;
                 default:
                     map.src = "https://maps.google.com/maps?q=đại học bách khoa hà nội&t=&z=10&ie=UTF8&iwloc=&output=embed";
             }
+
+            var today = new Date();
+            var year1 = today.getFullYear();
+            var month1 = today.getMonth() + 1; // Tháng bắt đầu từ 0, nên cần cộng thêm 1
+            var day1 = today.getDate();
+
+            var currentDateElement = document.getElementById('current-date');
+            currentDateElement.textContent = today.toLocaleDateString();
+
+            updateChart(region.value, year1, month1, day1);
         }
 
-        // Sự kiện khi nút thay khu vực được nhấn
-        map.addEventListener('click', function () {
-            var regionValue = region.value;
-            // Cập nhật biểu đồ với map đã chọn
-            updateChartNew(regionValue);
-        });
 
-        function updateChartNew(regionValue) {
-            // Thực hiện logic cập nhật biểu đồ với map đã chọn
-            // ...
-        }
     </script>
 
     <footer>
