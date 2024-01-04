@@ -6,13 +6,21 @@ import {
 
 import mqtt from "mqtt";
 
-
+/*
 const options = {
     host: '06162d20b700423c9ba43f95ff94a17f.s1.eu.hivemq.cloud',
     port: 8883,
     protocol: 'mqtts',
     username: 'longha',
     password: 'Longemqx123'
+}
+*/
+const options = {
+    host: 'c0ecad57e3dd4c4998bbfd35152b7f00.s2.eu.hivemq.cloud',
+    port: 8883,
+    protocol: 'mqtts',
+    username: 'hivemq.webclient.1704119813096',
+    password: 'ay5.4TXbB*>kN?c72RId'
 }
 
 export const deviceClientMQTT = {};
@@ -42,7 +50,7 @@ export function subscribeDevice(id) {
             console.log(`[ID_SUBCRIBE_MESSAGE_ERROR] ${id}`, error);
         }
     });
-    /*
+/*    
         message = 
         {
         "data": 
@@ -51,21 +59,21 @@ export function subscribeDevice(id) {
                 "value": 37
             }
         }
-
+*/
         
-    */
-    // deviceClientMQTT[id].on("message", (topic, message) => {
-    //     try {
-    //         message = JSON.parse(message);
-    //         console.log({ topic, message });
+    
+    deviceClientMQTT[id].on("message", (topic, message) => {
+        try {
+            message = JSON.parse(message);
+            console.log({ topic, message });
 
-    //         console.log(`${id} : ${JSON.stringify(message.data)}`);
-    //         const myData = { time: new Date(message.data.time), value: message.data.value };
-    //         updateDeviceById(id, myData);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // });
+            console.log(`${id} : ${JSON.stringify(message.data)}`);
+            const myData = { time: new Date(message.data.time), value: message.data.value };
+            updateDeviceById(id, myData);
+        } catch (error) {
+            console.log(error);
+        }
+    });
 }
 
 
