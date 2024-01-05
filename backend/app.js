@@ -5,6 +5,7 @@ import {
 } from "./src/models/deviceModel.js";
 
 import mqtt from "mqtt";
+import { sendMail } from "./src/services/sendMailService.js";
 
 
 const options = {
@@ -43,6 +44,9 @@ export function subscribeDevice(id) {
 
             device.data.push({ value: message });
             await device.save();
+            if (message > 3.0) {
+                await sendMail('long.hd204841@sis.hust.edu.vn', `Muc nuoc vuot qua ${3.0}M`);
+            }
         } catch (error) {
             console.log(`[ID_SUBCRIBE_MESSAGE_ERROR] ${id}`, error);
         }
