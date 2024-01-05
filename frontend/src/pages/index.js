@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import { useAuthContext } from 'src/contexts/auth-context';
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { redirect, useRouter } from 'next/navigation';
 
 
 async function fetchData(url) {
@@ -42,13 +43,13 @@ const Page = () => {
   const [currHour, setCurrHour] = useState(0);
   const [prevHour, setPrevHour] = useState(0);
   // address
-  const [address, setAddress] = useState(user.addresses[0])
+  const [address, setAddress] = useState(user?.addresses[0])
   // addresses
-  const options = user.addresses;
+  const options = user?.addresses;
   // date
   const [selectedDate, setSelectedDate] = useState(new Date());
   // api
-  const [apiUrl, setApiUrl] = useState(`http://localhost:8000/api/user/address/date?year=${selectedDate.getFullYear()}&month=${selectedDate.getMonth() + 1}&date=${selectedDate.getDate()}&address=${user.addresses[0]}`);
+  const [apiUrl, setApiUrl] = useState(`http://localhost:8000/api/user/address/date?year=${selectedDate.getFullYear()}&month=${selectedDate.getMonth() + 1}&date=${selectedDate.getDate()}&address=${user?.addresses[0]}`);
 
   useEffect(() => {
     const fetchDataAsync = async () => {
@@ -111,7 +112,7 @@ const Page = () => {
                 difference={currHour > 50 ? (currHour - 50) : (50 - currHour)}
                 positive={currHour > 50}
                 sx={{ height: '100%' }}
-                value="50"
+                value="3M"
               />
             </Grid>
             <Grid
@@ -143,7 +144,7 @@ const Page = () => {
                 value="$15k"
               /> */}
               <Autocomplete
-                defaultValue={user.addresses[0]}
+                defaultValue={user?.addresses[0]}
                 onChange={(event, newValue) => {
                   setAddress(newValue);
                   console.log(address);
@@ -163,7 +164,7 @@ const Page = () => {
               <OverviewSales
                 chartSeries={[
                   {
-                    name: 'This year',
+                    name: 'This day',
                     data: data
                   },
                 ]}

@@ -37,7 +37,7 @@ router.put("/devices", updateDeviceController);
 
 // user
 router.get("/user", verifyToken, getUserController);
-router.put("/user", verifyToken, updateUserController)
+router.post("/user", verifyToken, updateUserController)
 router.delete("/user", verifyToken, deleteUserController);
 // router.get("/user", getUserController);
 // router.put("/user", updateUserController)

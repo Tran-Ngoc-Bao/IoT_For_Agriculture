@@ -106,7 +106,7 @@ const useChartOptions = () => {
     },
     yaxis: {
       labels: {
-        formatter: (value) => (value > 0 ? `${value}mm` : `${value}`),
+        formatter: (value) => (value > 0 ? `${value}m` : `${value}`),
         offsetX: -10,
         style: {
           colors: theme.palette.text.secondary

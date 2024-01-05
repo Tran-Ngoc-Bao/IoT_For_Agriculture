@@ -3,19 +3,21 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Box, Button, Checkbox, FormControlLabel, Link, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, Grid, Link, Stack, TextField, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
-import { Layout as AuthLayout } from 'src/layouts/auth/layout';
+import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
+import { AccountProfile } from 'src/sections/account/account-profile';
+import { useAuthContext } from 'src/contexts/auth-context';
 
 const Page = () => {
   const router = useRouter();
-  const auth = useAuth();
+  const { user } = useAuth();
   const formik = useFormik({
     initialValues: {
-      email: '',
-      name: '',
+      email: user.email,
+      fullName: user.fullName,
       password: '',
-      checkboxes: [], // Mảng để lưu trữ giá trị checkbox
+      checkboxes: user.addresses, // Mảng để lưu trữ giá trị checkbox
       submit: null
     },
     validationSchema: Yup.object({
@@ -24,7 +26,7 @@ const Page = () => {
         .email('Must be a valid email')
         .max(255)
         .required('Email is required'),
-      name: Yup
+      fullName: Yup
         .string()
         .max(255)
         .required('Name is required'),
@@ -42,8 +44,27 @@ const Page = () => {
         // Thêm giá trị của checkbox vào mảng checkboxes trong values
         values.checkboxes = values.checkboxes || []; // Kiểm tra nếu values.checkboxes là null hoặc undefined, gán giá trị mảng rỗng
 
-        await auth.signUp(values.email, values.name, values.password, values.checkboxes);
-        router.push('/');
+        const data = {
+          fullName: values.fullName,
+          email: values.email,
+          password: values.password,
+          addresses: values.checkboxes
+        };
+        const res = await fetch("http://localhost:8000/api/user", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "JWT " + window.sessionStorage.getItem('token'), // Thay token bằng token đã lưu
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (res.ok) {
+          router.push('/auth/login');
+        } else {
+          console.error("Failed to edit user data");
+          throw new Error('Please check your address ');
+        }
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -56,7 +77,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Register | Devias Kit
+          Account | Devias Kit
         </title>
       </Head>
       <Box
@@ -81,9 +102,18 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Register
+                Account Edit
               </Typography>
-              <Typography
+              <div>
+                <Grid
+                  xs={12}
+                  md={6}
+                  lg={4}
+                >
+                  <AccountProfile />
+                </Grid>
+              </div>
+              {/* <Typography
                 color="text.secondary"
                 variant="body2"
               >
@@ -97,7 +127,7 @@ const Page = () => {
                 >
                   Log in
                 </Link>
-              </Typography>
+              </Typography> */}
             </Stack>
             <form
               noValidate
@@ -105,16 +135,18 @@ const Page = () => {
             >
               <Stack spacing={3}>
                 <TextField
+                  defaultValue={user.fullName}
                   error={!!(formik.touched.name && formik.errors.name)}
                   fullWidth
                   helperText={formik.touched.name && formik.errors.name}
                   label="Name"
-                  name="name"
+                  name="fullName"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  value={formik.values.name}
+                // value={formik.values.name}
                 />
                 <TextField
+                  defaultValue={user.email}
                   error={!!(formik.touched.email && formik.errors.email)}
                   fullWidth
                   helperText={formik.touched.email && formik.errors.email}
@@ -123,7 +155,7 @@ const Page = () => {
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   type="email"
-                  value={formik.values.email}
+                // value={formik.values.email}
                 />
                 <TextField
                   error={!!(formik.touched.password && formik.errors.password)}
@@ -134,7 +166,7 @@ const Page = () => {
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   type="password"
-                  value={formik.values.password}
+                // value={formik.values.password}
                 />
 
               </Stack>
@@ -144,7 +176,7 @@ const Page = () => {
                   control={<Checkbox
                     name="checkboxes"
                     value="Hà Nội"
-                    checked={formik.values.checkboxes.includes("Hà Nội")}
+                    defaultChecked={formik.values.checkboxes.includes("Hà Nội")}
                     onChange={formik.handleChange}
                   />}
                   label="Hà Nội"
@@ -153,7 +185,7 @@ const Page = () => {
                   control={<Checkbox
                     name="checkboxes"
                     value="Hòa Bình"
-                    checked={formik.values.checkboxes.includes("Hòa Bình")}
+                    defaultChecked={formik.values.checkboxes.includes("Hòa Bình")}
                     onChange={formik.handleChange}
                   />}
                   label="Hòa Bình"
@@ -162,7 +194,7 @@ const Page = () => {
                   control={<Checkbox
                     name="checkboxes"
                     value="Lai Châu"
-                    checked={formik.values.checkboxes.includes("Lai Châu")}
+                    defaultChecked={formik.values.checkboxes.includes("Lai Châu")}
                     onChange={formik.handleChange}
                   />}
                   label="Lai Châu"
@@ -171,7 +203,7 @@ const Page = () => {
                   control={<Checkbox
                     name="checkboxes"
                     value="Nam Định"
-                    checked={formik.values.checkboxes.includes("Nam Định")}
+                    defaultChecked={formik.values.checkboxes.includes("Nam Định")}
                     onChange={formik.handleChange}
                   />}
                   label="Nam Định"
@@ -180,7 +212,7 @@ const Page = () => {
                   control={<Checkbox
                     name="checkboxes"
                     value="Sơn La"
-                    checked={formik.values.checkboxes.includes("Sơn La")}
+                    defaultChecked={formik.values.checkboxes.includes("Sơn La")}
                     onChange={formik.handleChange}
                   />}
                   label="Sơn La"
@@ -202,7 +234,7 @@ const Page = () => {
                 type="submit"
                 variant="contained"
               >
-                Continue
+                Save change
               </Button>
             </form>
           </div>
@@ -213,9 +245,9 @@ const Page = () => {
 };
 
 Page.getLayout = (page) => (
-  <AuthLayout>
+  <DashboardLayout>
     {page}
-  </AuthLayout>
+  </DashboardLayout>
 );
 
 export default Page;

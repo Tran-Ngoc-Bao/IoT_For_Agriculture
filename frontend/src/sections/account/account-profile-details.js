@@ -10,6 +10,7 @@ import {
   TextField,
   Unstable_Grid2 as Grid
 } from '@mui/material';
+import { useAuth } from 'src/hooks/use-auth';
 
 const states = [
   {
@@ -31,13 +32,15 @@ const states = [
 ];
 
 export const AccountProfileDetails = () => {
+  const { user } = useAuth();
   const [values, setValues] = useState({
-    firstName: 'Anika',
-    lastName: 'Visser',
-    email: 'demo@devias.io',
-    phone: '',
-    state: 'los-angeles',
-    country: 'USA'
+    ...user
+    // firstName: 'Anika',
+    // lastName: 'Visser',
+    // email: 'demo@devias.io',
+    // phone: '',
+    // state: 'los-angeles',
+    // country: 'USA'
   });
 
   const handleChange = useCallback(
@@ -81,11 +84,11 @@ export const AccountProfileDetails = () => {
                 <TextField
                   fullWidth
                   helperText="Please specify the first name"
-                  label="First name"
+                  label="Full name"
                   name="firstName"
                   onChange={handleChange}
                   required
-                  value={values.firstName}
+                  value={values.fullName}
                 />
               </Grid>
               <Grid

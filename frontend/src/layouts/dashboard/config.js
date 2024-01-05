@@ -18,27 +18,27 @@ export const items = [
       </SvgIcon>
     )
   },
-  {
-    title: 'Customers',
-    path: '/customers',
-    icon: (
-      <SvgIcon fontSize="small">
-        <UsersIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Companies',
-    path: '/companies',
-    icon: (
-      <SvgIcon fontSize="small">
-        <ShoppingBagIcon />
-      </SvgIcon>
-    )
-  },
+  // {
+  //   title: 'Customers',
+  //   path: '/customers',
+  //   icon: (
+  //     <SvgIcon fontSize="small">
+  //       <UsersIcon />
+  //     </SvgIcon>
+  //   )
+  // },
+  // {
+  //   title: 'Companies',
+  //   path: '/companies',
+  //   icon: (
+  //     <SvgIcon fontSize="small">
+  //       <ShoppingBagIcon />
+  //     </SvgIcon>
+  //   )
+  // },
   {
     title: 'Account',
-    path: '/account',
+    path: '/register',
     icon: (
       <SvgIcon fontSize="small">
         <UserIcon />

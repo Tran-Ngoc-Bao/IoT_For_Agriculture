@@ -54,7 +54,7 @@ export const SideNav = (props) => {
           >
             <Logo />
           </Box>
-          <Box
+          {/* <Box
             sx={{
               alignItems: 'center',
               backgroundColor: 'rgba(255, 255, 255, 0.04)',
@@ -86,7 +86,7 @@ export const SideNav = (props) => {
             >
               <ChevronUpDownIcon />
             </SvgIcon>
-          </Box>
+          </Box> */}
         </Box>
         <Divider sx={{ borderColor: 'neutral.700' }} />
         <Box
@@ -140,7 +140,7 @@ export const SideNav = (props) => {
             color="neutral.500"
             variant="body2"
           >
-            Check out our Pro solution template.
+            Check out our GitHub.
           </Typography>
           <Box
             sx={{
@@ -153,10 +153,10 @@ export const SideNav = (props) => {
               }
             }}
           >
-            <img
+            {/* <img
               alt="Go to pro"
               src="/assets/devias-kit-pro.png"
-            />
+            /> */}
           </Box>
           <Button
             component="a"
@@ -166,12 +166,12 @@ export const SideNav = (props) => {
               </SvgIcon>
             )}
             fullWidth
-            href="https://material-kit-pro-react.devias.io/"
+            href="#"
             sx={{ mt: 2 }}
             target="_blank"
             variant="contained"
           >
-            Pro Live Preview
+            GitHub
           </Button>
         </Box>
       </Box>
