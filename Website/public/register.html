@@ -36,6 +36,20 @@
                 window.location.href = "./login.html";
               }, 3000);
               alert("Đăng ký thành công");
+
+              const content = 'Xin chào ' + data.fullName + '!';
+              fetch("http://localhost:8000/api/user/mail1", {
+                method: 'POST',
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email: email, content: content})
+              })
+                .then(response => response.json())
+                .catch(error => {
+                  console.error('Error sending email:', error);
+                });
+
             } else if (result.status === 0) {
               alert("Đăng ký không thành công, có thể Email đã tồn tại");
             }
@@ -46,7 +60,6 @@
           });
       });
     });
-
 
   </script>
 </head>

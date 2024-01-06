@@ -105,7 +105,7 @@
 
 
         // Lấy thông tin tài khoản
-        fetch('http://localhost:8000/api/user', {
+        fetch("http://localhost:8000/api/user", {
             method: 'GET',
             headers: {
                 authorization: 'JWT ' + localStorage.getItem('token') // Gửi mã thông báo hoặc session trong tiêu đề Authorization
@@ -138,7 +138,7 @@
                 alert('Địa chỉ đã tồn tại.');
             }
             else {
-                var url = 'http://localhost:8000/api/user/address?isAdd=1&address=' + newRegion;
+                var url = "http://localhost:8000/api/user/address?isAdd=1&address=" + newRegion;
 
 
                 fetch(url, {
@@ -175,7 +175,7 @@
                 alert('Địa chỉ không có trong danh sách.');
             }
             else {
-                var url = 'http://localhost:8000/api/user/address?isAdd=-1&address=' + newRegion;
+                var url = "http://localhost:8000/api/user/address?isAdd=-1&address=" + newRegion;
 
 
                 fetch(url, {

@@ -57,7 +57,7 @@ function generateDataForDay(address, date) {
 function generateDataForRecentDays(address) {
   const data = [];
   const currentDate = new Date();
-  for (let day = 0; day < 10; day++) {
+  for (let day = 0; day < 20; day++) {
     const date = new Date(currentDate.getTime() - day * 24 * 60 * 60 * 1000);
     const dayData = generateDataForDay(address, date);
     data.push(...dayData);

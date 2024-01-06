@@ -1,24 +1,21 @@
 import express from "express";
-
 import {
     Device,
     getDeviceDataInRange,
     getDeviceDataWithTime,
 } from "../models/deviceModel.js";
 
-import { deviceClientMQTT, subscribeDevice } from "../../app.js";
+import { client, deviceClientMQTT, subscribeDevice } from "../../app.js";
 
 export const getAllDevicesController = async (req, res) => {
     try {
         const devices = await Device.find();
-
         return res.status(200).json(devices);
     } catch (error) {
         console.log("[GET_ALL_DEVICE_ERROR]", error);
         return res.sendStatus(400);
     }
 }
-
 export const getDeviceController = async (req, res) => {
     try {
         const { id, address } = req.query;
@@ -29,11 +26,9 @@ export const getDeviceController = async (req, res) => {
         return res.sendStatus(400);
     }
 }
-
 export const createDeviceController = async (req, res) => {
     try {
         const { address } = req.body;
-
         const device = new Device({
             address: address,
             data: []
@@ -41,7 +36,13 @@ export const createDeviceController = async (req, res) => {
 
         const addDevice = await device.save().then(device => device);
 
-        subscribeDevice(addDevice.id);
+        // subscribeDevice(addDevice.id);
+        client.subscribe(addDevice.id, (err) => {
+            if (!err) {
+                console.log(`${addDevice.id} subscribe ${addDevice.id} successfully!`);
+            }
+        });
+
         return res.status(200).json(addDevice);
     } catch (error) {
         console.log("[CREATE_DEVICE_ERROR]", error);
@@ -50,20 +51,16 @@ export const createDeviceController = async (req, res) => {
         })
     }
 }
-
 export const updateDeviceController = async (req, res) => {
     try {
         // const { id, oldAddress } = req.query;
         const { id, address } = req.body;
-
         if (!address) {
             return res.sendStatus(400);
         }
-
         const device = await Device.findByIdAndUpdate(id, {
             address: address,
         });
-
         return res.status(200).json({
             message: "Update successfully!",
             deviceUpdate: device,
@@ -73,15 +70,21 @@ export const updateDeviceController = async (req, res) => {
         return res.sendStatus(400);
     }
 }
-
 export const deleteDeviceController = async (req, res) => {
     try {
         const { id, address } = req.query;
 
         const deletedDevice = await Device.findOneAndDelete({ _id: id }) || await Device.findOneAndDelete({ address: address });
 
-        deviceClientMQTT[id].end();
-        delete deviceClientMQTT[id];
+        // deviceClientMQTT[id].end();
+        // delete deviceClientMQTT[id];
+        client.unsubscribe(`device/${deletedDevice.id}`, function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("Successfully unsubscribed from topic: " + `device/${deletedDevice.id}`);
+            }
+        });
 
         return res.json({
             message: "Deleted successfully!",
