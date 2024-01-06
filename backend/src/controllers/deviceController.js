@@ -6,7 +6,7 @@ import {
     getDeviceDataWithTime,
 } from "../models/deviceModel.js";
 
-import { deviceClientMQTT, subscribeDevice } from "../../app.js";
+import { client, deviceClientMQTT, subscribeDevice } from "../../app.js";
 
 export const getAllDevicesController = async (req, res) => {
     try {
@@ -41,7 +41,13 @@ export const createDeviceController = async (req, res) => {
 
         const addDevice = await device.save().then(device => device);
 
-        subscribeDevice(addDevice.id);
+        // subscribeDevice(addDevice.id);
+        client.subscribe(addDevice.id, (err) => {
+            if (!err) {
+                console.log(`${addDevice.id} subscribe ${addDevice.id} successfully!`);
+            }
+        });
+
         return res.status(200).json(addDevice);
     } catch (error) {
         console.log("[CREATE_DEVICE_ERROR]", error);
@@ -80,8 +86,15 @@ export const deleteDeviceController = async (req, res) => {
 
         const deletedDevice = await Device.findOneAndDelete({ _id: id }) || await Device.findOneAndDelete({ address: address });
 
-        deviceClientMQTT[id].end();
-        delete deviceClientMQTT[id];
+        // deviceClientMQTT[id].end();
+        // delete deviceClientMQTT[id];
+        client.unsubscribe(`device/${deletedDevice.id}`, function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("Successfully unsubscribed from topic: " + `device/${deletedDevice.id}`);
+            }
+        });
 
         return res.json({
             message: "Deleted successfully!",
