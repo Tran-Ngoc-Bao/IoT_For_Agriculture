@@ -83,7 +83,7 @@
 
     <div class="table-container">
         <div class="current-data">
-            <h5>Mực nước hiện tại (m): <p style="display: inline;">3.3</p>
+            <h5>Mực nước hiện tại (m): <p style="display: inline;" id="mucNuocHienTai"></p>
             </h5>
         </div>
         <button class="account" id="fullname"><a href="./account.html">User</a></button>
@@ -203,14 +203,47 @@
             }
         }
 
+        async function updateMucNuocHienTai(address) {
+            const twentyFourHours = 24 * 60 * 60 * 1000; // 24 giờ trong milliseconds
+            let currentDay = new Date();
 
+            let mucNuocHienTai = null;
+
+            for (let i = 0; i < 20; i++) {
+                const response = await fetch(`http://localhost:8000/api/user/address/date?year=${currentDay.getFullYear()}&month=${currentDay.getMonth() + 1}&date=${currentDay.getDate()}&address=${address}`);
+                const data = await response.json();
+
+                for (let j = 0; j < data.data.length; j++) {
+                    if (data.data[j].value !== 0) {
+                        mucNuocHienTai = data.data[j].value.toFixed(2);
+                        break;
+                    }
+                }
+
+                if (mucNuocHienTai !== null) {
+                    break;
+                }
+
+                currentDay = new Date(currentDay - twentyFourHours);
+            }
+
+            const mucNuocHienTaiElement = document.getElementById('mucNuocHienTai');
+            if (mucNuocHienTai !== null) {
+                mucNuocHienTaiElement.innerText = mucNuocHienTai;
+            } else {
+                mucNuocHienTaiElement.innerText = 'Không có dữ liệu';
+            }
+            setTimeout(function() {
+                updateMucNuocHienTai(region.value);
+              }, 60000); // 60000 milliseconds = 1 phút Gọi lại sau 1 phút
+        }
 
 
 
         function changeMap() {
             var addresses = localStorage.getItem('adresses');
             var selectedRegion = region.value;
-        
+
             if (!addresses.includes(selectedRegion)) {
                 alert(`Địa chỉ: "${selectedRegion}" chưa được thêm`);
                 return;
@@ -242,6 +275,7 @@
             currentDateElement.textContent = today.toLocaleDateString();
 
             updateChart(region.value, year1, month1, day1);
+            updateMucNuocHienTai(region.value);
         }
 
 

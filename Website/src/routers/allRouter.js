@@ -17,6 +17,8 @@ import {
     updateUserController
 } from "../controllers/userController.js";
 
+import {sendMail, sendMail1} from "../services/sendMailService.js"
+
 const router = express.Router();
 
 // sign
@@ -47,4 +49,9 @@ router.put("/user/address", verifyToken, updateAddressController);
 // chon khu vuc hien thi du lieu
 router.get("/user/address", getAddressData)
 router.get("/user/address/date", getAddressDataByDate);
+
+// gui mail
+router.post("/user/mail", verifyToken, sendMail)
+router.post("/user/mail1", sendMail1)
+
 export default router;
