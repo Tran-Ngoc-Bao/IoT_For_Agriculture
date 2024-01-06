@@ -47,7 +47,7 @@ function generateDataForDay(address, date) {
   const startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
   for (let hour = 0; hour < 24; hour++) {
     const time = new Date(startDate.getTime() + hour * 60 * 60 * 1000);
-    const value = getRandomNumber(1, 100);
+    const value = getRandomNumber(0, 100) / 25;
     data.push({ time, value });
   }
   return data;

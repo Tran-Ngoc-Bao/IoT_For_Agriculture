@@ -96,6 +96,7 @@ void setup() {
   client.setServer(mqttServer, 8883);
 
 void loop() {
+  Serial.println("BAO");
   // Create pulse 10 micro seconds
   digitalWrite(trigger_pin, LOW);
   delayMicroseconds(2);
@@ -128,13 +129,13 @@ void loop() {
     Serial.println(msg);
     char buffer[msg.length() + 1];
     msg.toCharArray(buffer, msg.length() + 1);
-    client.publish("device/3", buffer);
-    client.publish("device/4", buffer);
+    client.publish("device/659968abbe1746b7a83c2bf0", buffer); // Son La
+    client.publish("device/659968e7be1746b7a83c2bf1", buffer); // Nam Dinh
     sum = 0;
     ++cnt;
   } 
 
   // Sync
-  unsigned long t = cnt * 600000;
+  unsigned long t = cnt * 6000;
   delay(t - millis());
 }

@@ -16,11 +16,11 @@ const options = {
 }
 */
 const options = {
-    host: 'c0ecad57e3dd4c4998bbfd35152b7f00.s2.eu.hivemq.cloud',
+    host: '6013f541d4ae432aa706c26260fcf199.s1.eu.hivemq.cloud',
     port: 8883,
     protocol: 'mqtts',
-    username: 'hivemq.webclient.1704119813096',
-    password: 'ay5.4TXbB*>kN?c72RId'
+    username: 'tranngocbao',
+    password: 'Tranbao12623'
 }
 
 export const deviceClientMQTT = {};
