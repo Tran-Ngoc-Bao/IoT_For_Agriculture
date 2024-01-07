@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 
 // Kết nối tới cơ sở dữ liệu MongoDB
 try {
-    mongoose.connect('mongodb://localhost:27017/myiot')
+    mongoose.connect('mongodb://localhost:27017/test')
         .then(() => console.log('Database connected!'))
 } catch (error) {
     console.log(error);

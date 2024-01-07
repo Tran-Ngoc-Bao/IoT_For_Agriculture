@@ -38,7 +38,7 @@
 
 ## Cài đặt hệ thống
 <ul>
-  <li>Các thiết bị cần thiết: <strong>Cáp type C, Dây nối 40P, ESP32, HCSR04</strong></li>
+  <li>Các thiết bị cần thiết: <strong>Cáp type C, Dây nối 40P, ESP32, HC-SR04</strong></li>
   <li>Những phần mềm ứng dụng cần cài đặt: <strong>Arduino IDE, MongoDB, MQTT explorer, Visual Studio Code</strong></li>
   <li>Cùng với MQTT broker miễn phí được hỗ trợ bởi <strong>HiveMQ Cloud</strong></li>
 </ul>
@@ -54,8 +54,34 @@
   <li>XEM CHI TIẾT TRONG BÁO CÁO BÀI TẬP LỚN</li>
 </ul>
 
+## Demo
+### Lắp đặt thiết bị
+<div style="display:flex;">
+  <img style="width:49%;height:500px" src="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProgressReport/Illustration/Device.png">
+  <img style="width:49%;height:500px" src="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProgressReport/Illustration/Test.png">
+</div>
+
+### Khởi chạy hệ thống
+<div style="display:flex;">
+  <img style="width:49%;height:300px" src="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProgressReport/Illustration/Start.png">
+  <img style="width:49%;height:300px" src="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProgressReport/Illustration/MQTT.png">
+</div>
+
+### Đăng nhập và Đăng ký
+<div style="display:flex;">
+  <img style="width:49%;height:300px" src="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProgressReport/Illustration/Login.png">
+  <img style="width:49%;height:300px" src="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProgressReport/Illustration/Signup.png">
+</div>
+
+### Trang chính và Tài khoản
+<div style="display:flex;">
+  <img style="width:49%;height:300px" src="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProgressReport/Illustration/Homepage.png">
+  <img style="width:49%;height:300px" src="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProgressReport/Illustration/User.png">
+</div>
+
 ## Báo cáo bài tập lớn
 <ul>
-  <li>Báo cáo</li>
-  <li>Slides</li>
+  <li><a href="https://github.com/Tran-Ngoc-Bao/ProjectIOT/blob/main/ProjectReport/report.pdf">Báo cáo</a></li>
+  <li><a href="https://github.com/Tran-Ngoc-Bao/ProjectIOT/blob/main/ProjectReport/slide.pptx">Slide</a></li>
+  <li><a href="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProjectReport/TranNgocBao_NguyenCanhChi_LyVanHieu_HaDuyLong.mp4">VIDEO DEMO SẢN PHẨM</a></li>
 </ul>
