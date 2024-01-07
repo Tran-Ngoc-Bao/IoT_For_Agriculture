@@ -11,11 +11,11 @@ import { Warning } from "./src/models/warningModel.js";
 
 
 const options = {
-    host: '06162d20b700423c9ba43f95ff94a17f.s1.eu.hivemq.cloud',
+    host: '6013f541d4ae432aa706c26260fcf199.s1.eu.hivemq.cloud',
     port: 8883,
     protocol: 'mqtts',
-    username: 'longha',
-    password: 'Longemqx123'
+    username: 'tranngocbao',
+    password: 'Tranbao12623'
 }
 
 export const deviceClientMQTT = {};
