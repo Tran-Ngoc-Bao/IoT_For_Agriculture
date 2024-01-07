@@ -213,7 +213,7 @@
                 const response = await fetch(`http://localhost:8000/api/user/address/date?year=${currentDay.getFullYear()}&month=${currentDay.getMonth() + 1}&date=${currentDay.getDate()}&address=${address}`);
                 const data = await response.json();
 
-                for (let j = 0; j < data.data.length; j++) {
+                for (let j = data.data.length - 1; j >= 0; j--) {
                     if (data.data[j].value !== 0) {
                         mucNuocHienTai = data.data[j].value.toFixed(2);
                         break;
