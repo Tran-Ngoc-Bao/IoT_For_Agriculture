@@ -7,6 +7,7 @@ import {
 import mqtt from "mqtt";
 import { sendMail } from "./src/services/sendMailService.js";
 import { User } from "./src/models/userModel.js";
+import { Warning } from "./src/models/warningModel.js";
 
 
 const options = {
@@ -108,7 +109,12 @@ export function subscribeDevice(id) {
 
             device.data.push({ value: message });
             await device.save();
-            if (message > 3.0) {
+            if (message > device.threshold) {
+                // lưu thông báo vào database
+                const warning = await Warning.findOne({ address: device.address });
+                warning.data.push({ value: message });
+                await warning.save();
+                // gửi email
                 await sendMails(device.address);
             }
         } catch (error) {

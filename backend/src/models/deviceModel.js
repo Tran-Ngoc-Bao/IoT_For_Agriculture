@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const deviceSchema = new mongoose.Schema({
     address: { type: String },
+    threshold: { type: Number, default: 3.0 },
     data: [
         {
             time: { type: Date, default: Date.now },
