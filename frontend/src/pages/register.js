@@ -8,8 +8,25 @@ import { useAuth } from 'src/hooks/use-auth';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { AccountProfile } from 'src/sections/account/account-profile';
 import { useAuthContext } from 'src/contexts/auth-context';
+import { useEffect, useState } from 'react';
+
+async function fetchData(url) {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Fetch error:', error.message);
+    throw error;
+  }
+}
 
 const Page = () => {
+  const [devices, setDevices] = useState([]);
   const router = useRouter();
   const { user } = useAuth();
   const formik = useFormik({
@@ -72,6 +89,20 @@ const Page = () => {
       }
     }
   });
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const result = await fetchData("http://localhost:8000/api/devices");
+        setDevices(result);
+      } catch (error) {
+        // Handle error if needed
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchDataAsync();
+  }, []);
 
   return (
     <>
@@ -172,7 +203,19 @@ const Page = () => {
               </Stack>
 
               <Stack spacing={1} sx={{ display: 'flex', flexDirection: 'column', }}>
-                <FormControlLabel
+                {devices?.map((device) => (
+                  <FormControlLabel
+                    key={device.id}
+                    control={<Checkbox
+                      name="checkboxes"
+                      value={device.address}
+                      checked={formik.values.checkboxes.includes(device.address)}
+                      onChange={formik.handleChange}
+                    />}
+                    label={device.address}
+                  />
+                ))}
+                {/* <FormControlLabel
                   control={<Checkbox
                     name="checkboxes"
                     value="Hà Nội"
@@ -216,7 +259,7 @@ const Page = () => {
                     onChange={formik.handleChange}
                   />}
                   label="Sơn La"
-                />
+                /> */}
               </Stack>
               {formik.errors.submit && (
                 <Typography

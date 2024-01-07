@@ -8,7 +8,9 @@ import { AuthConsumer, AuthProvider } from 'src/contexts/auth-context';
 import { useNProgress } from 'src/hooks/use-nprogress';
 import { createTheme } from 'src/theme';
 import { createEmotionCache } from 'src/utils/create-emotion-cache';
+
 import 'simplebar-react/dist/simplebar.min.css';
+import { MqttProvider } from 'src/contexts/mqtt-context';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -36,6 +38,7 @@ const App = (props) => {
       </Head>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <AuthProvider>
+          {/* <MqttProvider> */}
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <AuthConsumer>
@@ -46,6 +49,7 @@ const App = (props) => {
               }
             </AuthConsumer>
           </ThemeProvider>
+          {/* </MqttProvider> */}
         </AuthProvider>
       </LocalizationProvider>
     </CacheProvider>

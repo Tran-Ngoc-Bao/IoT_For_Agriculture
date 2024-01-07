@@ -10,11 +10,11 @@ import { OverviewTasksProgress } from 'src/sections/overview/overview-tasks-prog
 import { OverviewTotalCustomers } from 'src/sections/overview/overview-total-customers';
 import { OverviewTotalProfit } from 'src/sections/overview/overview-total-profit';
 import { OverviewTraffic } from 'src/sections/overview/overview-traffic';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useAuthContext } from 'src/contexts/auth-context';
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { redirect, useRouter } from 'next/navigation';
+import { MqttContext } from 'src/contexts/mqtt-context';
 
 
 async function fetchData(url) {
@@ -50,6 +50,8 @@ const Page = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   // api
   const [apiUrl, setApiUrl] = useState(`http://localhost:8000/api/user/address/date?year=${selectedDate.getFullYear()}&month=${selectedDate.getMonth() + 1}&date=${selectedDate.getDate()}&address=${user?.addresses[0]}`);
+  // message mqtt
+  // const message = useContext(MqttContext);
 
   useEffect(() => {
     const fetchDataAsync = async () => {
@@ -182,7 +184,7 @@ const Page = () => {
                 sx={{ height: '100%' }}
               />
             </Grid>
-            <Grid
+            {/* <Grid
               xs={12}
               md={6}
               lg={4}
@@ -222,8 +224,8 @@ const Page = () => {
                 ]}
                 sx={{ height: '100%' }}
               />
-            </Grid>
-            <Grid
+            </Grid> */}
+            {/* <Grid
               xs={12}
               md={12}
               lg={8}
@@ -293,7 +295,7 @@ const Page = () => {
                 ]}
                 sx={{ height: '100%' }}
               />
-            </Grid>
+            </Grid> */}
           </Grid>
         </Container>
       </Box>

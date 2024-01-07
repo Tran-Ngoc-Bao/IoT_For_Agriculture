@@ -1,5 +1,6 @@
 import ChartBarIcon from '@heroicons/react/24/solid/ChartBarIcon';
 import CogIcon from '@heroicons/react/24/solid/CogIcon';
+import DeviceTabletIcon from '@heroicons/react/24/solid/DeviceTabletIcon';
 import LockClosedIcon from '@heroicons/react/24/solid/LockClosedIcon';
 import ShoppingBagIcon from '@heroicons/react/24/solid/ShoppingBagIcon';
 import UserIcon from '@heroicons/react/24/solid/UserIcon';
@@ -18,15 +19,24 @@ export const items = [
       </SvgIcon>
     )
   },
-  // {
-  //   title: 'Customers',
-  //   path: '/customers',
-  //   icon: (
-  //     <SvgIcon fontSize="small">
-  //       <UsersIcon />
-  //     </SvgIcon>
-  //   )
-  // },
+  {
+    title: 'Users',
+    path: '/customers',
+    icon: (
+      <SvgIcon fontSize="small">
+        <UsersIcon />
+      </SvgIcon>
+    )
+  },
+  {
+    title: 'Devices',
+    path: '/devices',
+    icon: (
+      <SvgIcon fontSize="small">
+        <DeviceTabletIcon />
+      </SvgIcon>
+    )
+  },
   // {
   //   title: 'Companies',
   //   path: '/companies',
