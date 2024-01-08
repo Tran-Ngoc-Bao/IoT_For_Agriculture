@@ -7,8 +7,8 @@ int trigger_pin = 5;
 int echo_pin = 18;
 float deep_max = 4;
 
-const char *ssid = "TranNgocBao";
-const char *password = "TranNgocBao";
+const char *ssid = "Chcken";
+const char *password = "0377752925";
 
 const char *mqttServer = "6013f541d4ae432aa706c26260fcf199.s1.eu.hivemq.cloud";
 const char *mqttUser = "tranngocbao";
