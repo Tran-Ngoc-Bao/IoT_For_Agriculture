@@ -38,7 +38,7 @@
 
 ## Cài đặt hệ thống
 <ul>
-  <li>Các thiết bị cần thiết: <strong>Cáp type C, Dây nối 40P, ESP32, HCSR04</strong></li>
+  <li>Các thiết bị cần thiết: <strong>Cáp type C, Dây nối 40P, ESP32, HC-SR04</strong></li>
   <li>Những phần mềm ứng dụng cần cài đặt: <strong>Arduino IDE, MongoDB, MQTT explorer, Visual Studio Code</strong></li>
   <li>Cùng với MQTT broker miễn phí được hỗ trợ bởi <strong>HiveMQ Cloud</strong></li>
 </ul>
