@@ -56,6 +56,6 @@
 
 ## Báo cáo bài tập lớn
 <ul>
-  <li>Báo cáo</li>
-  <li><a href="https://github.com/Tran-Ngoc-Bao/ProjectIOT/blob/main/ProjectReport/slide.pptx">Slides</a></li>
+  <li><a href="https://github.com/Tran-Ngoc-Bao/ProjectIOT/blob/main/ProjectReport/report.pdf">Báo cáo</a></li>
+  <li><a href="https://github.com/Tran-Ngoc-Bao/ProjectIOT/blob/main/ProjectReport/slide.pptx">Slide</a></li>
 </ul>
