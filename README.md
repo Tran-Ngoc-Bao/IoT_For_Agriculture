@@ -58,5 +58,5 @@
 <ul>
   <li><a href="https://github.com/Tran-Ngoc-Bao/ProjectIOT/blob/main/ProjectReport/report.pdf">Báo cáo</a></li>
   <li><a href="https://github.com/Tran-Ngoc-Bao/ProjectIOT/blob/main/ProjectReport/slide.pptx">Slide</a></li>
-  <li><a href="https://husteduvn-my.sharepoint.com/:v:/g/personal/bao_tn215529_sis_hust_edu_vn/ERw_E8R_FOZPk8bD-UaxtYMBoLeBQpahqaw11ue7vcDCrA">VIDEO DEMO SẢN PHẨM</a></li>
+  <li><a href="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProjectReport/TranNgocBao_NguyenCanhChi_LyVanHieu_HaDuyLong.mp4">VIDEO DEMO SẢN PHẨM</a></li>
 </ul>
