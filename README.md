@@ -54,6 +54,31 @@
   <li>XEM CHI TIẾT TRONG BÁO CÁO BÀI TẬP LỚN</li>
 </ul>
 
+## Demo
+### Lắp đặt thiết bị
+<div style="display:flex;">
+  <img style="width:49%;height:500px" src="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProgressReport/Illustration/Device.png">
+  <img style="width:49%;height:500px" src="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProgressReport/Illustration/Test.png">
+</div>
+
+### Khởi chạy hệ thống
+<div style="display:flex;">
+  <img style="width:49%;height:300px" src="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProgressReport/Illustration/Start.png">
+  <img style="width:49%;height:300px" src="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProgressReport/Illustration/MQTT.png">
+</div>
+
+### Đăng nhập và Đăng ký
+<div style="display:flex;">
+  <img style="width:49%;height:300px" src="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProgressReport/Illustration/Login.png">
+  <img style="width:49%;height:300px" src="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProgressReport/Illustration/Signup.png">
+</div>
+
+### Trang chính và Tài khoản
+<div style="display:flex;">
+  <img style="width:49%;height:300px" src="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProgressReport/Illustration/Homepage.png">
+  <img style="width:49%;height:300px" src="https://github.com/Tran-Ngoc-Bao/IoTForAgriculture/blob/main/ProgressReport/Illustration/User.png">
+</div>
+
 ## Báo cáo bài tập lớn
 <ul>
   <li><a href="https://github.com/Tran-Ngoc-Bao/ProjectIOT/blob/main/ProjectReport/report.pdf">Báo cáo</a></li>
